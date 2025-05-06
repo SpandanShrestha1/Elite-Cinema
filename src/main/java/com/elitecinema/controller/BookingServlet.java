@@ -32,7 +32,7 @@ public class BookingServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         // Check if user is logged in
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
@@ -42,20 +42,20 @@ public class BookingServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
-        
+
         String pathInfo = request.getPathInfo();
-        
+
         if (pathInfo == null || pathInfo.equals("/")) {
             response.sendRedirect(request.getContextPath() + "/");
             return;
         }
-        
+
         if (pathInfo.equals("/seats")) {
             // Show seat selection page
             try {
                 int showId = Integer.parseInt(request.getParameter("showId"));
                 Show show = showDAO.getShowById(showId);
-                
+
                 if (show != null) {
                     request.setAttribute("show", show);
                     request.getRequestDispatcher("/WEB-INF/views/seat-selection.jsp").forward(request, response);
@@ -66,37 +66,8 @@ public class BookingServlet extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/");
             }
         } else if (pathInfo.equals("/payment")) {
-            // Show payment page
-            try {
-                int showId = Integer.parseInt(request.getParameter("showId"));
-                String[] selectedSeats = request.getParameterValues("seats");
-                
-                if (selectedSeats == null || selectedSeats.length == 0) {
-                    response.sendRedirect(request.getContextPath() + "/booking/seats?showId=" + showId + "&error=Please select at least one seat");
-                    return;
-                }
-                
-                Show show = showDAO.getShowById(showId);
-                
-                if (show != null) {
-                    // Calculate total amount
-                    BigDecimal totalAmount = show.getPrice().multiply(new BigDecimal(selectedSeats.length));
-                    
-                    // Store booking details in session for payment processing
-                    session.setAttribute("bookingShowId", showId);
-                    session.setAttribute("bookingSeats", selectedSeats);
-                    session.setAttribute("bookingTotalAmount", totalAmount);
-                    
-                    request.setAttribute("show", show);
-                    request.setAttribute("selectedSeats", selectedSeats);
-                    request.setAttribute("totalAmount", totalAmount);
-                    request.getRequestDispatcher("/WEB-INF/views/payment.jsp").forward(request, response);
-                } else {
-                    response.sendRedirect(request.getContextPath() + "/");
-                }
-            } catch (NumberFormatException e) {
-                response.sendRedirect(request.getContextPath() + "/");
-            }
+            // Redirect to seats page if accessed directly via GET
+            response.sendRedirect(request.getContextPath() + "/");
         } else if (pathInfo.equals("/confirm")) {
             // Show booking confirmation page
             request.getRequestDispatcher("/WEB-INF/views/booking-confirmation.jsp").forward(request, response);
@@ -108,49 +79,100 @@ public class BookingServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         // Check if user is logged in
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
-        
+
         User user = (User) session.getAttribute("user");
-        
+
+        String pathInfo = request.getPathInfo();
         String action = request.getParameter("action");
-        
-        if ("processPayment".equals(action)) {
+
+        if (pathInfo != null && pathInfo.equals("/payment")) {
+            // Handle seat selection form submission
+            try {
+                int showId = Integer.parseInt(request.getParameter("showId"));
+                String[] selectedSeats = request.getParameterValues("seats");
+
+                System.out.println("Processing seat selection for showId: " + showId);
+                if (selectedSeats != null) {
+                    System.out.println("Selected seats: " + String.join(", ", selectedSeats));
+                } else {
+                    System.out.println("No seats selected");
+                }
+
+                if (selectedSeats == null || selectedSeats.length == 0) {
+                    System.out.println("Redirecting due to no seats selected");
+                    response.sendRedirect(request.getContextPath() + "/booking/seats?showId=" + showId + "&error=Please select at least one seat");
+                    return;
+                }
+
+                Show show = showDAO.getShowById(showId);
+
+                if (show != null) {
+                    System.out.println("Show found: " + show.getMovie().getTitle());
+                    // Calculate total amount
+                    BigDecimal totalAmount = show.getPrice().multiply(new BigDecimal(selectedSeats.length));
+                    System.out.println("Total amount: " + totalAmount);
+
+                    // Store booking details in session for payment processing
+                    session.setAttribute("bookingShowId", showId);
+                    session.setAttribute("bookingSeats", selectedSeats);
+                    session.setAttribute("bookingTotalAmount", totalAmount);
+
+                    request.setAttribute("show", show);
+                    request.setAttribute("selectedSeats", selectedSeats);
+                    request.setAttribute("totalAmount", totalAmount);
+
+                    System.out.println("Forwarding to payment page");
+                    request.getRequestDispatcher("/WEB-INF/views/payment.jsp").forward(request, response);
+                } else {
+                    System.out.println("Show not found, redirecting to home");
+                    response.sendRedirect(request.getContextPath() + "/");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid showId format: " + e.getMessage());
+                response.sendRedirect(request.getContextPath() + "/");
+            } catch (Exception e) {
+                System.out.println("Error processing seat selection: " + e.getMessage());
+                e.printStackTrace();
+                response.sendRedirect(request.getContextPath() + "/booking/seats?error=An error occurred. Please try again.");
+            }
+        } else if ("processPayment".equals(action)) {
             // Process payment (mock)
             // In a real application, this would integrate with a payment gateway
-            
+
             // Get booking details from session
             Integer showId = (Integer) session.getAttribute("bookingShowId");
             String[] selectedSeats = (String[]) session.getAttribute("bookingSeats");
             BigDecimal totalAmount = (BigDecimal) session.getAttribute("bookingTotalAmount");
-            
+
             if (showId == null || selectedSeats == null || totalAmount == null) {
                 response.sendRedirect(request.getContextPath() + "/");
                 return;
             }
-            
+
             // Create booking
             String seatNumbers = Arrays.stream(selectedSeats).collect(Collectors.joining(","));
             Booking booking = new Booking(user.getUserId(), showId, selectedSeats.length, seatNumbers, totalAmount);
-            
+
             int bookingId = bookingDAO.createBooking(booking);
-            
+
             if (bookingId > 0) {
                 // Clear booking details from session
                 session.removeAttribute("bookingShowId");
                 session.removeAttribute("bookingSeats");
                 session.removeAttribute("bookingTotalAmount");
-                
+
                 // Set booking confirmation details
                 request.setAttribute("bookingId", bookingId);
                 request.setAttribute("seatNumbers", seatNumbers);
                 request.setAttribute("totalAmount", totalAmount);
-                
+
                 // Forward to confirmation page
                 response.sendRedirect(request.getContextPath() + "/booking/confirm?bookingId=" + bookingId);
             } else {

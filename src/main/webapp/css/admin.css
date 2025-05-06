@@ -191,16 +191,29 @@
     max-height: 100%;
 }
 
+/* Movie Thumbnail Styles */
+.movie-thumbnail {
+    width: 100px;
+    text-align: center;
+}
+
+.movie-thumbnail img {
+    max-height: 100px;
+    max-width: 100%;
+    object-fit: contain;
+    border-radius: 3px;
+}
+
 /* Responsive Admin Styles */
 @media (max-width: 768px) {
     .admin-container {
         flex-direction: column;
     }
-    
+
     .admin-sidebar {
         width: 100%;
     }
-    
+
     .form-row {
         flex-direction: column;
     }

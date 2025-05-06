@@ -11,6 +11,10 @@
     <c:if test="${param.isAdmin}">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin.css">
     </c:if>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- SweetAlert2 for better alerts -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <header>

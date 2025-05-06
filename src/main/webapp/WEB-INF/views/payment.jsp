@@ -11,13 +11,13 @@
         <div class="form-title">
             <h2>Payment</h2>
         </div>
-        
+
         <c:if test="${not empty param.error}">
             <div class="alert alert-danger">
                 ${param.error}
             </div>
         </c:if>
-        
+
         <div class="payment-summary">
             <h3>Booking Summary</h3>
             <table>
@@ -55,7 +55,7 @@
                 </tr>
             </table>
         </div>
-        
+
         <div class="payment-methods">
             <h3>Select Payment Method</h3>
             <div class="payment-method-list">
@@ -70,10 +70,10 @@
                 </div>
             </div>
         </div>
-        
-        <form action="${pageContext.request.contextPath}/booking/confirm" method="post">
+
+        <form id="paymentForm" action="${pageContext.request.contextPath}/booking/confirm" method="post">
             <input type="hidden" name="action" value="processPayment">
-            
+
             <div class="payment-details">
                 <!-- Credit Card Form (shown by default) -->
                 <div class="payment-form credit-card-form">
@@ -96,12 +96,12 @@
                         <input type="text" id="cardName" name="cardName">
                     </div>
                 </div>
-                
+
                 <!-- PayPal Form (hidden by default) -->
                 <div class="payment-form paypal-form" style="display: none;">
                     <p>You will be redirected to PayPal to complete your payment.</p>
                 </div>
-                
+
                 <!-- Bank Transfer Form (hidden by default) -->
                 <div class="payment-form bank-transfer-form" style="display: none;">
                     <p>Please transfer the amount to the following bank account:</p>
@@ -110,9 +110,9 @@
                     <p>IFSC Code: ELITE0001234</p>
                 </div>
             </div>
-            
+
             <div class="form-actions">
-                <button type="submit" class="btn btn-primary">Pay Now</button>
+                <button type="button" id="payNowBtn" class="btn btn-primary">Pay Now</button>
             </div>
         </form>
     </div>
@@ -122,18 +122,18 @@
     document.addEventListener('DOMContentLoaded', function() {
         const paymentMethods = document.querySelectorAll('.payment-method-item');
         const paymentForms = document.querySelectorAll('.payment-form');
-        
+
         paymentMethods.forEach(function(method) {
             method.addEventListener('click', function() {
                 // Remove selected class from all methods
                 paymentMethods.forEach(m => m.classList.remove('selected'));
-                
+
                 // Add selected class to clicked method
                 this.classList.add('selected');
-                
+
                 // Hide all payment forms
                 paymentForms.forEach(form => form.style.display = 'none');
-                
+
                 // Show selected payment form
                 const methodName = this.dataset.method;
                 const selectedForm = document.querySelector(`.${methodName}-form`);
@@ -142,9 +142,48 @@
                 }
             });
         });
-        
+
         // Select credit card by default
         paymentMethods[0].click();
+
+        // Handle Pay Now button click
+        const payNowBtn = document.getElementById('payNowBtn');
+        const paymentForm = document.getElementById('paymentForm');
+
+        if (payNowBtn && paymentForm) {
+            payNowBtn.addEventListener('click', function() {
+                // Show confirmation dialog
+                Swal.fire({
+                    title: 'Confirm Booking',
+                    text: 'Are you sure you want to proceed with this booking?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#e50914',
+                    cancelButtonColor: '#333',
+                    confirmButtonText: 'Yes, book now!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Show processing message
+                        Swal.fire({
+                            title: 'Processing Payment',
+                            text: 'Please wait while we process your payment...',
+                            icon: 'info',
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            willOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+
+                        // Submit the form after a short delay to show the loading animation
+                        setTimeout(() => {
+                            paymentForm.submit();
+                        }, 1500);
+                    }
+                });
+            });
+        }
     });
 </script>
 

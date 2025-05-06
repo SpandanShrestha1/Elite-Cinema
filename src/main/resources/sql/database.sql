@@ -55,5 +55,3 @@ CREATE TABLE IF NOT EXISTS bookings (
 );
 
 -- Insert admin user (password: admin123)
-INSERT INTO users (name, email, password, is_admin) 
-VALUES ('Admin', 'admin@elitecinema.com', 'admin123', TRUE);

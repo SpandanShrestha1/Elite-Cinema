@@ -6,6 +6,18 @@
     <jsp:param name="title" value="Booking Confirmation" />
 </jsp:include>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Show success message using SweetAlert2
+        Swal.fire({
+            title: 'Booking Successful!',
+            text: 'Your booking has been confirmed.',
+            icon: 'success',
+            confirmButtonColor: '#e50914'
+        });
+    });
+</script>
+
 <div class="container">
     <div class="booking-confirmation">
         <div class="confirmation-icon">
@@ -14,7 +26,7 @@
         <h2>Booking Confirmed!</h2>
         <p>Your booking has been successfully confirmed. Your booking ID is <strong>${param.bookingId}</strong>.</p>
         <p>A confirmation email has been sent to your registered email address.</p>
-        
+
         <div class="booking-details">
             <h3>Booking Details</h3>
             <table>
@@ -44,7 +56,7 @@
                 </tr>
             </table>
         </div>
-        
+
         <div class="confirmation-actions">
             <a href="${pageContext.request.contextPath}/user/bookings" class="btn btn-primary">View My Bookings</a>
             <a href="${pageContext.request.contextPath}/" class="btn btn-secondary">Back to Home</a>

@@ -359,21 +359,36 @@ main {
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s ease;
+    border: 1px solid #ddd;
+    font-weight: bold;
+    user-select: none;
+}
+
+.seat.available {
+    background-color: #4CAF50;
+    color: white;
 }
 
 .seat.available:hover {
     background-color: #e50914;
     color: #fff;
+    transform: scale(1.1);
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
 }
 
 .seat.selected {
     background-color: #e50914;
     color: #fff;
+    transform: scale(1.1);
+    box-shadow: 0 0 8px rgba(229,9,20,0.5);
+    border: 1px solid #c50000;
 }
 
 .seat.booked {
     background-color: #ddd;
+    color: #999;
     cursor: not-allowed;
+    border: 1px solid #ccc;
 }
 
 .seat-legend {
@@ -396,15 +411,20 @@ main {
 }
 
 .legend-box.available {
-    background-color: #f5f5f5;
+    background-color: #4CAF50;
+    border: 1px solid #ddd;
 }
 
 .legend-box.selected {
     background-color: #e50914;
+    border: 1px solid #c50000;
+    box-shadow: 0 0 5px rgba(229,9,20,0.5);
 }
 
 .legend-box.booked {
     background-color: #ddd;
+    border: 1px solid #ccc;
+    color: #999;
 }
 
 /* Payment Styles */
@@ -469,6 +489,24 @@ main {
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     text-align: center;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.confirmation-icon {
+    font-size: 5rem;
+    color: #4CAF50;
+    margin-bottom: 20px;
+    animation: scaleIn 0.5s ease-in-out;
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
 }
 
 .booking-confirmation h2 {
@@ -708,24 +746,24 @@ footer {
         flex-direction: column;
         padding: 10px;
     }
-    
+
     .logo {
         margin-bottom: 10px;
     }
-    
+
     nav ul {
         margin-bottom: 10px;
     }
-    
+
     .movie-details {
         flex-direction: column;
     }
-    
+
     .movie-poster-large {
         flex: 0 0 auto;
         height: 400px;
     }
-    
+
     .footer-content {
         flex-direction: column;
     }
@@ -736,19 +774,19 @@ footer {
         flex-direction: column;
         align-items: center;
     }
-    
+
     nav ul li {
         margin: 5px 0;
     }
-    
+
     .auth-buttons {
         flex-direction: column;
     }
-    
+
     .movie-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .seat-map {
         grid-template-columns: repeat(5, 1fr);
     }
