@@ -11,12 +11,12 @@
     <jsp:include page="../common/admin-sidebar.jsp">
         <jsp:param name="active" value="dashboard" />
     </jsp:include>
-    
+
     <div class="admin-content">
         <div class="admin-header">
             <h2>Dashboard</h2>
         </div>
-        
+
         <div class="dashboard-stats">
             <div class="stat-card">
                 <h3>Total Users</h3>
@@ -36,10 +36,10 @@
             </div>
             <div class="stat-card">
                 <h3>Total Revenue</h3>
-                <div class="stat-value">$<fmt:formatNumber value="${totalRevenue}" pattern="#,##0.00" /></div>
+                <div class="stat-value">Rs. <fmt:formatNumber value="${totalRevenue}" pattern="#,##0.00" /></div>
             </div>
         </div>
-        
+
         <div class="recent-bookings">
             <h3>Recent Bookings</h3>
             <c:choose>
@@ -66,7 +66,7 @@
                                     <td>${booking.user.name}</td>
                                     <td>${booking.show.movie.title}</td>
                                     <td>
-                                        <fmt:formatDate value="${booking.show.date}" pattern="MMM dd, yyyy" /> at 
+                                        <fmt:formatDate value="${booking.show.date}" pattern="MMM dd, yyyy" /> at
                                         <fmt:formatDate value="${booking.show.time}" pattern="hh:mm a" />
                                     </td>
                                     <td>${booking.seatNumbers}</td>

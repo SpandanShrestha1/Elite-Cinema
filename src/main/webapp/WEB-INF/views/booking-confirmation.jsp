@@ -52,7 +52,7 @@
                 </tr>
                 <tr>
                     <th>Total Amount</th>
-                    <td>$<fmt:formatNumber value="${booking.totalAmount}" pattern="#,##0.00" /></td>
+                    <td>Rs. <fmt:formatNumber value="${booking.totalAmount}" pattern="#,##0.00" /></td>
                 </tr>
             </table>
         </div>

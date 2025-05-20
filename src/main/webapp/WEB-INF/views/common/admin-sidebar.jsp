@@ -31,6 +31,11 @@
                 <i class="fa fa-ticket"></i> Bookings
             </a>
         </li>
+        <li class="${param.active == 'banners' ? 'active' : ''}">
+            <a href="${pageContext.request.contextPath}/admin/banners">
+                <i class="fa fa-image"></i> Banners
+            </a>
+        </li>
         <li>
             <a href="${pageContext.request.contextPath}/">
                 <i class="fa fa-home"></i> Back to Site

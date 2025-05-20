@@ -11,13 +11,13 @@
     <jsp:include page="../common/admin-sidebar.jsp">
         <jsp:param name="active" value="shows" />
     </jsp:include>
-    
+
     <div class="admin-content">
         <div class="admin-header">
             <h2>Show Management</h2>
             <a href="${pageContext.request.contextPath}/admin/show/add" class="btn btn-primary">Add New Show</a>
         </div>
-        
+
         <div class="admin-table">
             <c:choose>
                 <c:when test="${empty shows}">
@@ -46,10 +46,10 @@
                                     <td><fmt:formatDate value="${show.time}" pattern="hh:mm a" /></td>
                                     <td>${show.totalSeats}</td>
                                     <td>${show.availableSeats}</td>
-                                    <td>$<fmt:formatNumber value="${show.price}" pattern="#,##0.00" /></td>
+                                    <td>Rs. <fmt:formatNumber value="${show.price}" pattern="#,##0.00" /></td>
                                     <td class="actions">
                                         <a href="${pageContext.request.contextPath}/admin/show/edit?id=${show.showId}" class="btn btn-primary">Edit</a>
-                                        <a href="${pageContext.request.contextPath}/admin/show/delete?id=${show.showId}" 
+                                        <a href="${pageContext.request.contextPath}/admin/show/delete?id=${show.showId}"
                                            class="btn btn-danger"
                                            onclick="return confirm('Are you sure you want to delete this show? This action cannot be undone.')">
                                             Delete

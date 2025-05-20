@@ -47,11 +47,11 @@
                 </tr>
                 <tr>
                     <th>Price per Seat</th>
-                    <td>$<fmt:formatNumber value="${show.price}" pattern="#,##0.00" /></td>
+                    <td>Rs. <fmt:formatNumber value="${show.price}" pattern="#,##0.00" /></td>
                 </tr>
                 <tr>
                     <th>Total Amount</th>
-                    <td>$<fmt:formatNumber value="${totalAmount}" pattern="#,##0.00" /></td>
+                    <td>Rs. <fmt:formatNumber value="${totalAmount}" pattern="#,##0.00" /></td>
                 </tr>
             </table>
         </div>

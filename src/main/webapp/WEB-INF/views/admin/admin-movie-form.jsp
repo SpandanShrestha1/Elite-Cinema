@@ -11,32 +11,32 @@
     <jsp:include page="../common/admin-sidebar.jsp">
         <jsp:param name="active" value="movies" />
     </jsp:include>
-    
+
     <div class="admin-content">
         <div class="admin-header">
             <h2>${empty movie ? 'Add New Movie' : 'Edit Movie'}</h2>
         </div>
-        
+
         <c:if test="${not empty error}">
             <div class="alert alert-danger">
                 ${error}
             </div>
         </c:if>
-        
+
         <div class="admin-form">
             <form action="${pageContext.request.contextPath}/admin/movie/${empty movie ? 'add' : 'edit'}" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="action" value="${empty movie ? 'add' : 'edit'}">
                 <c:if test="${not empty movie}">
                     <input type="hidden" name="movieId" value="${movie.movieId}">
                 </c:if>
-                
+
                 <div class="form-row">
                     <div class="form-col">
                         <div class="form-group">
                             <label for="title">Movie Title</label>
                             <input type="text" id="title" name="title" value="${movie.title}" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="genre">Genre</label>
                             <select id="genre" name="genre" required>
@@ -51,19 +51,27 @@
                                 <option value="Animation" ${movie.genre == 'Animation' ? 'selected' : ''}>Animation</option>
                             </select>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="duration">Duration (minutes)</label>
                             <input type="number" id="duration" name="duration" value="${movie.duration}" min="1" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="releaseDate">Release Date</label>
-                            <input type="date" id="releaseDate" name="releaseDate" 
+                            <input type="date" id="releaseDate" name="releaseDate"
                                    value="<fmt:formatDate value="${movie.releaseDate}" pattern="yyyy-MM-dd" />" required>
                         </div>
+
+                        <div class="form-group">
+                            <label for="status">Status</label>
+                            <select id="status" name="status" required>
+                                <option value="now_showing" ${empty movie.status || movie.status == 'now_showing' ? 'selected' : ''}>Now Showing</option>
+                                <option value="upcoming" ${movie.status == 'upcoming' ? 'selected' : ''}>Upcoming</option>
+                            </select>
+                        </div>
                     </div>
-                    
+
                     <div class="form-col">
                         <div class="form-group">
                             <label for="image">Movie Poster</label>
@@ -79,12 +87,12 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="description">Description</label>
                     <textarea id="description" name="description" rows="5" required>${movie.description}</textarea>
                 </div>
-                
+
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">${empty movie ? 'Add Movie' : 'Update Movie'}</button>
                     <a href="${pageContext.request.contextPath}/admin/movies" class="btn btn-secondary">Cancel</a>

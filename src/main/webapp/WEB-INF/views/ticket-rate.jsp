@@ -10,7 +10,7 @@
         <div class="section-title">
             <h2>Ticket Rates</h2>
         </div>
-        
+
         <table class="rate-table">
             <thead>
                 <tr>
@@ -23,31 +23,31 @@
             <tbody>
                 <tr>
                     <td>Monday - Thursday</td>
-                    <td>$8.00</td>
-                    <td>$10.00</td>
-                    <td>$15.00</td>
+                    <td>Rs. 800.00</td>
+                    <td>Rs. 1,000.00</td>
+                    <td>Rs. 1,500.00</td>
                 </tr>
                 <tr>
                     <td>Friday</td>
-                    <td>$10.00</td>
-                    <td>$12.00</td>
-                    <td>$18.00</td>
+                    <td>Rs. 1,000.00</td>
+                    <td>Rs. 1,200.00</td>
+                    <td>Rs. 1,800.00</td>
                 </tr>
                 <tr>
                     <td>Saturday - Sunday</td>
-                    <td>$12.00</td>
-                    <td>$15.00</td>
-                    <td>$20.00</td>
+                    <td>Rs. 1,200.00</td>
+                    <td>Rs. 1,500.00</td>
+                    <td>Rs. 2,000.00</td>
                 </tr>
                 <tr>
                     <td>Public Holidays</td>
-                    <td>$12.00</td>
-                    <td>$15.00</td>
-                    <td>$20.00</td>
+                    <td>Rs. 1,200.00</td>
+                    <td>Rs. 1,500.00</td>
+                    <td>Rs. 2,000.00</td>
                 </tr>
             </tbody>
         </table>
-        
+
         <div class="rate-notes">
             <h3>Notes:</h3>
             <ul>
@@ -55,8 +55,8 @@
                 <li>Senior citizens (65+ years) get a 20% discount on all ticket types.</li>
                 <li>Students with valid ID get a 10% discount on all ticket types.</li>
                 <li>Special discounts available for group bookings (10+ tickets).</li>
-                <li>3D movies have an additional charge of $3.00 per ticket.</li>
-                <li>IMAX screenings have an additional charge of $5.00 per ticket.</li>
+                <li>3D movies have an additional charge of Rs. 300.00 per ticket.</li>
+                <li>IMAX screenings have an additional charge of Rs. 500.00 per ticket.</li>
                 <li>Prices are subject to change without prior notice.</li>
             </ul>
         </div>

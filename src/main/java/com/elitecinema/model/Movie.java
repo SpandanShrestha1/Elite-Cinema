@@ -14,6 +14,7 @@ public class Movie {
     private int duration;
     private Date releaseDate;
     private String imagePath;
+    private String status; // 'now_showing' or 'upcoming'
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
@@ -22,8 +23,8 @@ public class Movie {
     }
 
     // Constructor with fields
-    public Movie(int movieId, String title, String genre, String description, int duration, 
-                 Date releaseDate, String imagePath, Timestamp createdAt, Timestamp updatedAt) {
+    public Movie(int movieId, String title, String genre, String description, int duration,
+                 Date releaseDate, String imagePath, String status, Timestamp createdAt, Timestamp updatedAt) {
         this.movieId = movieId;
         this.title = title;
         this.genre = genre;
@@ -31,19 +32,21 @@ public class Movie {
         this.duration = duration;
         this.releaseDate = releaseDate;
         this.imagePath = imagePath;
+        this.status = status;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
     // Constructor for creating a new movie
-    public Movie(String title, String genre, String description, int duration, 
-                 Date releaseDate, String imagePath) {
+    public Movie(String title, String genre, String description, int duration,
+                 Date releaseDate, String imagePath, String status) {
         this.title = title;
         this.genre = genre;
         this.description = description;
         this.duration = duration;
         this.releaseDate = releaseDate;
         this.imagePath = imagePath;
+        this.status = status;
     }
 
     // Getters and Setters
@@ -103,6 +106,14 @@ public class Movie {
         this.imagePath = imagePath;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public Timestamp getCreatedAt() {
         return createdAt;
     }
@@ -129,6 +140,7 @@ public class Movie {
                 ", duration=" + duration +
                 ", releaseDate=" + releaseDate +
                 ", imagePath='" + imagePath + '\'' +
+                ", status='" + status + '\'' +
                 '}';
     }
 }

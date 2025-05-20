@@ -26,7 +26,7 @@
                 <span><fmt:formatDate value="${movie.releaseDate}" pattern="MMM dd, yyyy" /></span>
             </div>
             <p>${movie.description}</p>
-            
+
             <div class="showtimes">
                 <h3>Showtimes</h3>
                 <c:choose>
@@ -44,7 +44,7 @@
                                         <fmt:formatDate value="${show.time}" pattern="hh:mm a" />
                                     </div>
                                     <div class="showtime-price">
-                                        $<fmt:formatNumber value="${show.price}" pattern="#,##0.00" />
+                                        Rs. <fmt:formatNumber value="${show.price}" pattern="#,##0.00" />
                                     </div>
                                     <div class="showtime-seats">
                                         ${show.availableSeats} seats available

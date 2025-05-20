@@ -54,7 +54,11 @@ document.addEventListener('DOMContentLoaded', function() {
             // Update total price
             if (totalPriceElement) {
                 const totalPrice = selectedSeats.length * pricePerSeat;
-                totalPriceElement.textContent = totalPrice.toFixed(2);
+                // Format with thousand separators
+                totalPriceElement.textContent = totalPrice.toLocaleString('en-IN', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
             }
 
             // Enable/disable continue button

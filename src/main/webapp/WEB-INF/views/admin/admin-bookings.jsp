@@ -11,12 +11,12 @@
     <jsp:include page="../common/admin-sidebar.jsp">
         <jsp:param name="active" value="bookings" />
     </jsp:include>
-    
+
     <div class="admin-content">
         <div class="admin-header">
             <h2>Booking Management</h2>
         </div>
-        
+
         <div class="admin-table">
             <c:choose>
                 <c:when test="${empty bookings}">
@@ -44,18 +44,18 @@
                                     <td>${booking.user.name}</td>
                                     <td>${booking.show.movie.title}</td>
                                     <td>
-                                        <fmt:formatDate value="${booking.show.date}" pattern="MMM dd, yyyy" /> at 
+                                        <fmt:formatDate value="${booking.show.date}" pattern="MMM dd, yyyy" /> at
                                         <fmt:formatDate value="${booking.show.time}" pattern="hh:mm a" />
                                     </td>
                                     <td>${booking.seatNumbers}</td>
-                                    <td>$<fmt:formatNumber value="${booking.totalAmount}" pattern="#,##0.00" /></td>
+                                    <td>Rs. <fmt:formatNumber value="${booking.totalAmount}" pattern="#,##0.00" /></td>
                                     <td><fmt:formatDate value="${booking.bookingDate}" pattern="MMM dd, yyyy HH:mm" /></td>
                                     <td>
                                         <span class="status ${booking.status.toLowerCase()}">${booking.status}</span>
                                     </td>
                                     <td class="actions">
                                         <c:if test="${booking.status == 'CONFIRMED'}">
-                                            <a href="${pageContext.request.contextPath}/admin/booking/cancel?id=${booking.bookingId}" 
+                                            <a href="${pageContext.request.contextPath}/admin/booking/cancel?id=${booking.bookingId}"
                                                class="btn btn-danger"
                                                onclick="return confirm('Are you sure you want to cancel this booking?')">
                                                 Cancel

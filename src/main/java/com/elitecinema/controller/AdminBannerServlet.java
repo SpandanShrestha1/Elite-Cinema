@@ -35,18 +35,18 @@ public class AdminBannerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         // Check if user is logged in and is admin
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("user") == null || 
+        if (session == null || session.getAttribute("user") == null ||
                 !((User) session.getAttribute("user")).isAdmin()) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
-        
+
         String pathInfo = request.getPathInfo();
         String servletPath = request.getServletPath();
-        
+
         if (servletPath.equals("/admin/banners")) {
             // List all banners
             List<Banner> banners = bannerDAO.getAllBanners();
@@ -61,7 +61,7 @@ public class AdminBannerServlet extends HttpServlet {
                 try {
                     int bannerId = Integer.parseInt(request.getParameter("id"));
                     Banner banner = bannerDAO.getBannerById(bannerId);
-                    
+
                     if (banner != null) {
                         request.setAttribute("banner", banner);
                         request.getRequestDispatcher("/WEB-INF/views/admin/admin-banner-form.jsp").forward(request, response);
@@ -75,7 +75,7 @@ public class AdminBannerServlet extends HttpServlet {
                 // Delete banner
                 try {
                     int bannerId = Integer.parseInt(request.getParameter("id"));
-                    
+
                     // Get banner to delete its image file
                     Banner banner = bannerDAO.getBannerById(bannerId);
                     if (banner != null && banner.getImagePath() != null) {
@@ -86,7 +86,7 @@ public class AdminBannerServlet extends HttpServlet {
                             imageFile.delete();
                         }
                     }
-                    
+
                     bannerDAO.deleteBanner(bannerId);
                     response.sendRedirect(request.getContextPath() + "/admin/banners?message=Banner deleted successfully");
                 } catch (NumberFormatException e) {
@@ -112,57 +112,88 @@ public class AdminBannerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         // Check if user is logged in and is admin
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("user") == null || 
+        if (session == null || session.getAttribute("user") == null ||
                 !((User) session.getAttribute("user")).isAdmin()) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
-        
+
         String pathInfo = request.getPathInfo();
-        
+
         if (pathInfo != null) {
             if (pathInfo.equals("/add") || pathInfo.equals("/edit")) {
                 // Process banner form submission
                 String action = request.getParameter("action");
-                
+
                 if ("add".equals(action) || "edit".equals(action)) {
                     // Get form data
                     String title = request.getParameter("title");
                     String description = request.getParameter("description");
                     boolean active = request.getParameter("active") != null;
-                    
+
                     // Validate form data
                     if (title == null || title.trim().isEmpty()) {
                         request.setAttribute("error", "Title is required");
                         request.getRequestDispatcher("/WEB-INF/views/admin/admin-banner-form.jsp").forward(request, response);
                         return;
                     }
-                    
+
                     // Handle file upload
                     Part filePart = request.getPart("image");
                     String imagePath = null;
-                    
-                    if (filePart != null && filePart.getSize() > 0) {
-                        // Generate unique filename
-                        String fileName = UUID.randomUUID().toString() + getFileExtension(filePart);
-                        
-                        // Create uploads directory if it doesn't exist
-                        String uploadPath = getServletContext().getRealPath("") + File.separator + "uploads" + File.separator + "banners";
-                        File uploadDir = new File(uploadPath);
-                        if (!uploadDir.exists()) {
-                            uploadDir.mkdirs();
-                        }
-                        
-                        // Save file
-                        filePart.write(uploadPath + File.separator + fileName);
-                        
-                        // Set image path
-                        imagePath = "uploads/banners/" + fileName;
+
+                    System.out.println("Processing file upload...");
+                    if (filePart != null) {
+                        System.out.println("File part size: " + filePart.getSize());
+                        System.out.println("File part name: " + filePart.getName());
+                        System.out.println("File part content type: " + filePart.getContentType());
+                    } else {
+                        System.out.println("File part is null");
                     }
-                    
+
+                    if (filePart != null && filePart.getSize() > 0) {
+                        try {
+                            // Generate unique filename
+                            String fileName = UUID.randomUUID().toString() + getFileExtension(filePart);
+                            System.out.println("Generated filename: " + fileName);
+
+                            // Create uploads directory if it doesn't exist
+                            String uploadPath = getServletContext().getRealPath("") + File.separator + "uploads" + File.separator + "banners";
+                            System.out.println("Upload path: " + uploadPath);
+
+                            File uploadDir = new File(uploadPath);
+                            if (!uploadDir.exists()) {
+                                boolean created = uploadDir.mkdirs();
+                                System.out.println("Created upload directory: " + created);
+                            } else {
+                                System.out.println("Upload directory already exists");
+                            }
+
+                            // Save file
+                            String fullPath = uploadPath + File.separator + fileName;
+                            System.out.println("Saving file to: " + fullPath);
+                            filePart.write(fullPath);
+
+                            // Verify file was saved
+                            File savedFile = new File(fullPath);
+                            if (savedFile.exists()) {
+                                System.out.println("File saved successfully. Size: " + savedFile.length() + " bytes");
+                            } else {
+                                System.out.println("File was not saved successfully");
+                            }
+
+                            // Set image path
+                            imagePath = "uploads/banners/" + fileName;
+                            System.out.println("Image path set to: " + imagePath);
+                        } catch (Exception e) {
+                            System.out.println("Error saving file: " + e.getMessage());
+                            e.printStackTrace();
+                        }
+                    }
+
                     if ("add".equals(action)) {
                         // Create new banner
                         if (imagePath == null) {
@@ -170,10 +201,10 @@ public class AdminBannerServlet extends HttpServlet {
                             request.getRequestDispatcher("/WEB-INF/views/admin/admin-banner-form.jsp").forward(request, response);
                             return;
                         }
-                        
+
                         Banner banner = new Banner(title, description, imagePath, active);
                         int bannerId = bannerDAO.createBanner(banner);
-                        
+
                         if (bannerId > 0) {
                             response.sendRedirect(request.getContextPath() + "/admin/banners?message=Banner added successfully");
                         } else {
@@ -185,13 +216,13 @@ public class AdminBannerServlet extends HttpServlet {
                         try {
                             int bannerId = Integer.parseInt(request.getParameter("bannerId"));
                             Banner banner = bannerDAO.getBannerById(bannerId);
-                            
+
                             if (banner != null) {
                                 // Update banner data
                                 banner.setTitle(title);
                                 banner.setDescription(description);
                                 banner.setActive(active);
-                                
+
                                 // Update image if provided
                                 if (imagePath != null) {
                                     // Delete old image file
@@ -202,13 +233,13 @@ public class AdminBannerServlet extends HttpServlet {
                                             oldImageFile.delete();
                                         }
                                     }
-                                    
+
                                     // Set new image path
                                     banner.setImagePath(imagePath);
                                 }
-                                
+
                                 boolean updated = bannerDAO.updateBanner(banner);
-                                
+
                                 if (updated) {
                                     response.sendRedirect(request.getContextPath() + "/admin/banners?message=Banner updated successfully");
                                 } else {
@@ -233,7 +264,7 @@ public class AdminBannerServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/admin/banners");
         }
     }
-    
+
     /**
      * Get file extension from Part
      * @param part Part object
@@ -242,7 +273,7 @@ public class AdminBannerServlet extends HttpServlet {
     private String getFileExtension(Part part) {
         String contentDisp = part.getHeader("content-disposition");
         String[] items = contentDisp.split(";");
-        
+
         for (String item : items) {
             if (item.trim().startsWith("filename")) {
                 String fileName = item.substring(item.indexOf("=") + 2, item.length() - 1);
@@ -252,7 +283,7 @@ public class AdminBannerServlet extends HttpServlet {
                 }
             }
         }
-        
+
         return "";
     }
 }

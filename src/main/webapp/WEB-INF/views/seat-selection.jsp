@@ -61,8 +61,8 @@
 
         <div class="seat-selection-summary">
             <p>Selected Seats: <span id="selectedSeats"></span></p>
-            <p>Price per Seat: $<fmt:formatNumber value="${show.price}" pattern="#,##0.00" /></p>
-            <p>Total Price: $<span id="totalPrice" data-price="${show.price}">0.00</span></p>
+            <p>Price per Seat: Rs. <fmt:formatNumber value="${show.price}" pattern="#,##0.00" /></p>
+            <p>Total Price: Rs. <span id="totalPrice" data-price="${show.price}">0.00</span></p>
         </div>
 
         <form id="seatSelectionForm" action="${pageContext.request.contextPath}/booking/payment" method="post">
